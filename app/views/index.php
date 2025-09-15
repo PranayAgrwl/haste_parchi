@@ -1,0 +1,12 @@
+<?php 
+	include_once('header.php');
+	include_once('navbar.php');
+?>
+    <div>
+        <?php 
+            include_once('home.php');
+        ?>
+    </div>
+<?php
+	include_once('footer.php');
+?>

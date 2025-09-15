@@ -1,0 +1,16 @@
+DROP TABLE IF EXISTS `master`;
+CREATE TABLE `master` (
+    `cust_id` INT PRIMARY KEY AUTO_INCREMENT ,
+    `cust_name` VARCHAR(100) UNIQUE ,
+    `cust_station` VARCHAR(100) ,
+    `cust_transport` VARCHAR(100)
+);
+
+-- --------------------------------------------------------------------------------
+-- Notes:
+-- - `ON DELETE SET NULL`: This ensures that if a referenced row in a foreign table is deleted,
+--   the corresponding value in this table becomes NULL instead of preventing the deletion.
+-- - VARCHAR(255): A common length for string fields. Adjust as needed.
+-- - TEXT: Used for `email_notes` as it can store longer text.
+-- - The `master` table's `contact_person_id` is a self-referencing foreign key.
+-- --------------------------------------------------------------------------------

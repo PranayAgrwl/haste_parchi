@@ -1,0 +1,100 @@
+-- This script creates the four requested tables for the `haste_parchi` database.
+-- It is designed to be run in a MySQL environment.
+
+-- --------------------------------------------------------------------------------
+-- Table 2: `cities`
+-- Stores a list of all cities and their unique codes.
+-- This table is created first because other tables will reference it.
+-- --------------------------------------------------------------------------------
+DROP TABLE IF EXISTS `cities`;
+CREATE TABLE `cities` (
+    `city_id` INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Serial number for cities.',
+    `city_name` VARCHAR(255) NOT NULL COMMENT 'The name of the city.',
+    `city_code` VARCHAR(50) UNIQUE NOT NULL COMMENT 'Unique code for each city.'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------------------------------
+-- Table 3: `relations`
+-- Stores the types of relationships (e.g., brother, salesman).
+-- This table is created before the master table to support foreign key constraints.
+-- --------------------------------------------------------------------------------
+DROP TABLE IF EXISTS `relations`;
+CREATE TABLE `relations` (
+    `relation_id` INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Serial number for relation types.',
+    `relation_name` VARCHAR(255) NOT NULL COMMENT 'The type of relationship, e.g., brother, salesman.'
+    `relation_code` VARCHAR(50) UNIQUE NOT NULL COMMENT 'Unique relationship code for each relationship type'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------------------------------
+-- Table 4: `transports`
+-- Stores a list of transportation providers.
+-- This table is created before the master table to support foreign key constraints.
+-- --------------------------------------------------------------------------------
+DROP TABLE IF EXISTS `transports`;
+CREATE TABLE `transports` (
+    `transport_id` INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Serial number for transportation providers.',
+    `transport_name` VARCHAR(255) NOT NULL COMMENT 'The name of the transportation provider.'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------------------------------
+-- Table 1: `master`
+-- The main table containing all vyapari (trader) information.
+-- This table includes foreign keys to link to the other three tables.
+-- A self-referencing foreign key is also included for the contact person.
+-- --------------------------------------------------------------------------------
+DROP TABLE IF EXISTS `master`;
+CREATE TABLE `master` (
+    `master_id` INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Serial number for this table.',
+    `vyapari_code_empire` VARCHAR(100) UNIQUE COMMENT 'Unique code from the Empire software.',
+    `firm_name` VARCHAR(255) NOT NULL COMMENT 'The name of the firm.',
+    `common_short_form` VARCHAR(100) COMMENT 'Common short name for the firm.',
+    `other_billing_firm_1` VARCHAR(255) COMMENT 'First other billing firm name.',
+    `other_billing_firm_2` VARCHAR(255) COMMENT 'Second other billing firm name.',
+    `other_billing_firm_3` VARCHAR(255) COMMENT 'Third other billing firm name.',
+    `vyapari_name` VARCHAR(255) COMMENT 'Name of the firm owner/vyapari.',
+    `vyapari_surname` VARCHAR(255) COMMENT 'Vyapari surname.',
+    `vyapari_nickname` VARCHAR(255) COMMENT 'Vyapari nickname.',
+    `vyapari_phone` VARCHAR(50) COMMENT 'Phone number of the firm owner/vyapari.',
+    `vyapari_phone_2` VARCHAR(50) COMMENT 'Secondary phone number.',
+    `vyapari_phone_3` VARCHAR(50) COMMENT 'Tertiary phone number.',
+    `associate_name_1` VARCHAR(255) COMMENT 'Name of the associate.',
+    `associate_relation_id_1` INT COMMENT 'Foreign key to the relations table.',
+    `associate_phone_1` VARCHAR(50) COMMENT 'Phone number of the associate.',
+    `associate_name_2` VARCHAR(255) COMMENT 'Name of the associate.',
+    `associate_relation_id_2` INT COMMENT 'Foreign key to the relations table.',
+    `associate_phone_2` VARCHAR(50) COMMENT 'Phone number of the associate.',
+    `associate_name_3` VARCHAR(255) COMMENT 'Name of the associate.',
+    `associate_relation_id_3` INT COMMENT 'Foreign key to the relations table.',
+    `associate_phone_3` VARCHAR(50) COMMENT 'Phone number of the associate.',
+    `associate_name_4` VARCHAR(255) COMMENT 'Name of the associate.',
+    `associate_relation_id_4` INT COMMENT 'Foreign key to the relations table.',
+    `associate_phone_4` VARCHAR(50) COMMENT 'Phone number of the associate.',
+    `associate_name_5` VARCHAR(255) COMMENT 'Name of the associate.',
+    `associate_relation_id_5` INT COMMENT 'Foreign key to the relations table.',
+    `associate_phone_5` VARCHAR(50) COMMENT 'Phone number of the associate.',
+    `associate_name_6` VARCHAR(255) COMMENT 'Name of the associate.',
+    `associate_relation_id_6` INT COMMENT 'Foreign key to the relations table.',
+    `associate_phone_6` VARCHAR(50) COMMENT 'Phone number of the associate.',
+    `vyapari_email_1` VARCHAR(255) COMMENT 'Primary email address.',
+    `vyapari_email_2` VARCHAR(255) COMMENT 'Secondary email address.',
+    `email_notes` TEXT COMMENT 'Notes related to the email addresses.',
+    `vyapari_station_id` INT COMMENT 'Foreign key to the cities table.',
+    `vyapari_gst` VARCHAR(255) COMMENT 'Primary GST number.',
+    `vyapari_transport_id` INT COMMENT 'Foreign key to the transports table.',
+    `contact_person_id` INT COMMENT 'Foreign key to another entry in this same table for a contact person.',
+    
+    -- Defining Foreign Key Constraints
+    FOREIGN KEY (`associate_relation_id`) REFERENCES `relations`(`relation_id`) ON DELETE SET NULL,
+    FOREIGN KEY (`vyapari_station_id`) REFERENCES `cities`(`city_id`) ON DELETE SET NULL,
+    FOREIGN KEY (`vyapari_transport_id`) REFERENCES `transports`(`transport_id`) ON DELETE SET NULL,
+    FOREIGN KEY (`contact_person_id`) REFERENCES `master`(`master_id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------------------------------
+-- Notes:
+-- - `ON DELETE SET NULL`: This ensures that if a referenced row in a foreign table is deleted,
+--   the corresponding value in this table becomes NULL instead of preventing the deletion.
+-- - VARCHAR(255): A common length for string fields. Adjust as needed.
+-- - TEXT: Used for `email_notes` as it can store longer text.
+-- - The `master` table's `contact_person_id` is a self-referencing foreign key.
+-- --------------------------------------------------------------------------------
