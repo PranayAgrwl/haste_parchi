@@ -56,7 +56,24 @@ class InvoiceBox
         // --- Header Section ---
         $this->pdf->SetFont('Arial', '', 7);
         $this->pdf->Cell($width * 0.4, 5, 'GSTIN : 24AARPA7722L1ZI', 0, 0, 'L');
-        $this->pdf->Cell($width * 0.2, 5, '|| OM ||', 0, 0, 'C');
+        
+        // $this->pdf->Cell($width * 0.2, 5, '|| OM ||', 0, 0, 'C');
+        $imagePath = 'public/resources/ShreeGaneshIcon/ShreeGanesh2.png'; // Corrected relative path
+        $imageWidth = 5; // Set the desired width of the image
+        $imageHeight = 5; // Set the desired height of the image
+
+        // Calculate the cell width and center the image
+        $cellWidth = $width * 0.2;
+        $imageX = $this->pdf->GetX() + ($cellWidth - $imageWidth) / 2;
+        $imageY = $this->pdf->GetY() + 0.5; 
+        
+        // Output the image
+        $this->pdf->Image($imagePath, $imageX, $imageY, $imageWidth, $imageHeight);
+        
+        // Use an empty cell to maintain the correct cursor position for the next element
+        $this->pdf->Cell($cellWidth, 5, '', 0, 0, 'C'); 
+
+
         $this->pdf->Cell($width * 0.4, 5, 'Phone : 93749 22332', 0, 1, 'R');
         $this->pdf->Ln(0.5);
 

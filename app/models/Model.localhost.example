@@ -3,20 +3,18 @@
 class Model
 {
 	public $connection;
-
+	
 	public function __construct()
 	{
-		$config = require(__DIR__ . '/../config/db_config.php');
-
-		$this->connection = new mysqli(
-			$config['servername'],
-			$config['username'],
-			$config['password'],
-			$config['dbname']
-		);
-
+		$servername = "localhost";
+		$username = "root";  // Default username for XAMPP
+		$password = "";      // Default password for XAMPP (empty string)
+		$dbname = "db_pranay_office_deetex"; // Database name
+		
+		$this->connection = new mysqli($servername, $username, $password, $dbname);
+		
 		if ($this->connection->connect_error) {
-			die("Database Connection Error: " . $this->connection->connect_error);
+		    die("Database Connection Error: " . $this->connection->connect_error);
 		}
 	}
 
